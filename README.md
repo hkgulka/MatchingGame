@@ -10,4 +10,12 @@ The application will be a classic-style card matching game, in which the player 
 This application is intended to be used by anyone feeling bored, or maybe just interested in short memory-related games. Its main purpose is simply to be *entertaining* for the player.
 
 Personally, this project is of interest to me because I wanted to make a fun application, but I also wanted it to require some degree of thinking to use. I enjoy playing games that test your memory, so this seemed like a very logical and enjoyable option!
+
+## User Stories
+
+- As a user, I want to be able to select a pair of cards and view their identities/guess at a match
+- As a user, I want to be able to see the identities of card pairs I have already matched
+- As a user, I want to be able to view the remaining (face down) cards on the board
+- As a user, I want to be able to view the number of pair guesses I have made so far
+- As a user, I want to be able to add more pairs of cards to the game
  
