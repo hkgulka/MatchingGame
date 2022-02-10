@@ -1,10 +1,13 @@
-# My Personal Project
+# My Personal Project: Matching Game
 
-## A subtitle
+## Basic Premises
 
-A *bulleted* list:
-- item 1
-- item 2
-- item 3
+The application will be a classic-style card matching game, in which the player is presented with a fixed number of cards (face down) with matching identity pairs, and must attempt to find the pairs of matching cards. 
+- To match one card with another, the player will select two cards they believe (or guess) to be a match. When both selected, the identities of the cards will be revealed to the player for a brief amount of time
+- If the two cards are a match, they will be removed from the board. If the cards are not a match, they will return to anonymity (face down) and stay where they are on the board
+- The game is won when **all cards have been paired** with their match (i.e. the board is empty)
 
-An example of text with **bold** and *italic* fonts.  
+This application is intended to be used by anyone feeling bored, or maybe just interested in short memory-related games. Its main purpose is simply to be *entertaining* for the player.
+
+Personally, this project is of interest to me because I wanted to make a fun application, but I also wanted it to require some degree of thinking to use. I enjoy playing games that test your memory, so this seemed like a very logical and enjoyable option!
+ 
