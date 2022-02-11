@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,6 +59,29 @@ class MatchingGameTest {
         assertEquals("D", testGame.findUnusedIdentity());
         testGame.addCardPair();
         assertEquals("E", testGame.findUnusedIdentity());
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+        testGame.addCardPair();
+     assertNull(testGame.findUnusedIdentity());
     }
 
     @Test

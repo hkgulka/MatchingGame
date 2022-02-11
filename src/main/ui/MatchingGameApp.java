@@ -72,7 +72,6 @@ public class MatchingGameApp {
     // EFFECTS: runs the matching game
     private void playGame() {
         boolean gameNotOver = true;
-        String command = null;
         System.out.println("\nStarting the game!");
 
         while (gameNotOver) {

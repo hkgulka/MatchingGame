@@ -54,7 +54,7 @@ public class MatchingGame {
         makeBoardArrangement();
     }
 
-    // EFFECTS: finds the first identity in POSSIBLE_IDENTITIES that is not in cardIdentities; returns ""
+    // EFFECTS: finds the first identity in POSSIBLE_IDENTITIES that is not in cardIdentities; returns null
     //          if all identities are in use
     public String findUnusedIdentity() {
         for (String s : POSSIBLE_IDENTITIES) {
@@ -62,7 +62,7 @@ public class MatchingGame {
                 return s;
             }
         }
-        return "";
+        return null;
     }
 
     // REQUIRES: this.cardIdentities does not already contain newIdentity AND newIdentity
