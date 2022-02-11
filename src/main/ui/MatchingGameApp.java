@@ -61,6 +61,10 @@ public class MatchingGameApp {
 
     // EFFECTS: displays the menu of options to the user
     private void displayMenu() {
+        System.out.println("\nEach card in the game has an 'identity'. Your goal is to guess all");
+        System.out.println("of the pairs of cards with matching identities, without seeing those");
+        System.out.println("identities all at once. When you guess a card, its identity will be");
+        System.out.println("temporarily revealed to you -- try to remember it for later guesses!");
         System.out.println("\nThere are currently " + game.getCardAmount() / 2 + " pairs of cards in the game.");
         System.out.println("Menu:");
         System.out.println("\ta -> add a pair of cards");
