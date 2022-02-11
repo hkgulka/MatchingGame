@@ -9,41 +9,48 @@ import java.util.List;
 // Represents a matching game with an amount of cards, list of card identities in use,
 // cards on the board, cards matched, and number of guesses made
 public class MatchingGame {
-    private static final List<String> POSSIBLE_IDENTITIES = new LinkedList<String>(Arrays.asList("A", "B", "C", "D",
+    private static final List<String> POSSIBLE_IDENTITIES = new LinkedList<>(Arrays.asList("A", "B", "C", "D",
             "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y",
             "Z"));
 
-    private int cardAmount;               // total number of cards in the game
-    private List<String> cardIdentities;  // list of all card identities already in the game
-    private List<Card> unmatchedCards;    // list of all cards still on the board
-    private List<Card> matchedCards;      // list of all cards matched
-    private int numGuesses;               // number of guesses made
-    private String unusedIdentity;        // the first available identity in POSSIBLE_IDENTITIES; "" if none
-    private LinkedList<Integer> locationNumList;// holds a list of remaining possible location numbers
+    private int cardAmount;                            // total number of cards in the game
+    private List<String> cardIdentities;               // list of all card identities already in the game
+    private List<Card> unmatchedCards;                 // list of all cards still on the board
+    private LinkedList<Integer> unmatchedLocationNums; // list of all the location numbers of unmatched cards
+    private List<Card> matchedCards;                   // list of all cards matched
+    private int numGuesses;                            // number of guesses made
+    private int numMatches;                            // number of matches made
 
     // EFFECTS: constructs a game with 4 cards, a list of card identities in use,
-    //          a list of all cards on the board, empty list of cards matched, and
-    //          0 guesses made, then rearranges the board
+    //          a list of all cards on the board, a list of the location numbers on the board,
+    //          an empty list of cards matched, 0 guesses made, and 0 matches made, then rearranges the board
     public MatchingGame() {
         this.cardAmount = 4;
-        this.cardIdentities = new LinkedList<String>(Arrays.asList("A", "B"));
-        this.unmatchedCards = new LinkedList<Card>(Arrays.asList(new Card("A"), new Card("A"),
+        this.cardIdentities = new LinkedList<>(Arrays.asList("A", "B"));
+        this.unmatchedCards = new LinkedList<>(Arrays.asList(new Card("A"), new Card("A"),
                 new Card("B"), new Card("B")));
+        this.unmatchedLocationNums = new LinkedList<>(Arrays.asList(1, 2, 3, 4));
         this.matchedCards = new LinkedList<>();
         this.numGuesses = 0;
+        this.numMatches = 0;
         makeBoardArrangement();
     }
 
     // REQUIRES: cardAmount / 2 + 1 <= the number of items in POSSIBLE_IDENTITIES
     // MODIFIES: this
     // EFFECTS: adds a new (matching) pair of cards to the board and assigns
-    //          them a unique identity, marks that identity as used, then rearranges the board
+    //          them a unique identity, marks that identity as used, makes a new list of location numbers
+    //          for cards on the board, then rearranges the board
     public void addCardPair() {
-        this.unusedIdentity = findUnusedIdentity();
-        this.unmatchedCards.add(new Card(this.unusedIdentity));
-        this.unmatchedCards.add(new Card(this.unusedIdentity));
+        String unusedIdentity = findUnusedIdentity();
+        this.unmatchedCards.add(new Card(unusedIdentity));
+        this.unmatchedCards.add(new Card(unusedIdentity));
         this.cardAmount = this.cardAmount + 2;
-        addNewCardIdentity(this.unusedIdentity);
+        this.unmatchedLocationNums = new LinkedList<>();
+        for (int i = 1; i <= this.unmatchedCards.size(); ++i) {
+            this.unmatchedLocationNums.add(i);
+        }
+        addNewCardIdentity(unusedIdentity);
         makeBoardArrangement();
     }
 
@@ -51,7 +58,7 @@ public class MatchingGame {
     //          if all identities are in use
     public String findUnusedIdentity() {
         for (String s : POSSIBLE_IDENTITIES) {
-            if (cardIdentities.indexOf(s) == -1) {
+            if (!cardIdentities.contains(s)) {
                 return s;
             }
         }
@@ -66,32 +73,35 @@ public class MatchingGame {
         this.cardIdentities.add(newIdentity);
     }
 
-    // REQUIRES: locationNum is within [1, cardAmount] AND locationNum corresponds
-    //           to a card in unmatchedCards
+    // REQUIRES: locationNum corresponds to a card in unmatchedCards
     // MODIFIES: this
     // EFFECTS: removes a card from the list of cards on the board and puts it at
-    //          the end of the list of matched cards, also changes its status to matched
+    //          the end of the list of matched cards, removes that location number
+    //          from the list of unmatched location numbers, and changes the card's status to matched
     public void removeCardFromBoard(int locationNum) {
-        this.unmatchedCards.get(findCard(locationNum)).matchCard();
-        this.matchedCards.add(this.unmatchedCards.get(findCard(locationNum)));
+        findCard(locationNum).matchCard();
+        this.matchedCards.add(findCard(locationNum));
         this.unmatchedCards.remove(findCard(locationNum));
+        this.unmatchedLocationNums.removeFirstOccurrence(locationNum);
     }
 
     // REQUIRES: locationNum is within [1, cardAmount]
-    // EFFECTS: returns the index of the card in unmatchedCards with the given locationNum,
-    //          or returns -1 if no card with that locationNum is found
-    public int findCard(int locationNum) {
+    // EFFECTS: returns the card in unmatchedCards with the given locationNum,
+    //          or returns null if no card with that locationNum is found
+    public Card findCard(int locationNum) {
         for (Card c : this.unmatchedCards) {
             if (c.getLocationNum() == locationNum) {
-                return this.unmatchedCards.indexOf(c);
+                return c;
             }
         }
-        return -1;
+        return null;
     }
 
-    // REQUIRES: both cards are in unmatchedCards
-    // EFFECTS: returns true if two cards have the same identity, false otherwise
-    public boolean isAMatch(Card c1, Card c2) {
+    // REQUIRES: both locationNum1 and locationNum2 correspond to a card in unmatchedCards
+    // EFFECTS: returns true if two cards of given location numbers have the same identity, false otherwise
+    public boolean isAMatch(int locationNum1, int locationNum2) {
+        Card c1 = findCard(locationNum1);
+        Card c2 = findCard(locationNum2);
         return c1.getIdentity().equals(c2.getIdentity());
     }
 
@@ -102,17 +112,30 @@ public class MatchingGame {
     }
 
     // MODIFIES: this
+    // EFFECTS: adds 1 to the number of matches made
+    public void countAnotherMatch() {
+        this.numMatches = this.numMatches + 1;
+    }
+
+    // MODIFIES: this
     // EFFECTS: randomly assigns a (different) locationNum to each card in
     //          the list of unmatched cards
     public void makeBoardArrangement() {
-        this.locationNumList = new LinkedList<>();
+        LinkedList<Integer> locationNumList = new LinkedList<>();
         for (int i = this.unmatchedCards.size(); i >= 1; --i) {
-            this.locationNumList.add(i);
+            locationNumList.add(i);
         }
-        Collections.shuffle(this.locationNumList);
+        Collections.shuffle(locationNumList);
         for (Card c : this.unmatchedCards) {
-            c.changeLocationNum(this.locationNumList.removeFirst());
+            c.changeLocationNum(locationNumList.removeFirst());
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: checks if all matches have been made, and if so produces true; else false
+    public boolean checkGameOver() {
+        int totalMatches = this.cardAmount / 2;
+        return totalMatches == this.numMatches;
     }
 
     // EFFECTS: returns the total number of cards in the game
@@ -127,17 +150,26 @@ public class MatchingGame {
 
     // EFFECTS: returns the list of cards still on the board
     public List<Card> getUnmatchedCards() {
-        return unmatchedCards;
+        return this.unmatchedCards;
+    }
+
+    public List<Integer> getUnmatchedLocationNums() {
+        return this.unmatchedLocationNums;
     }
 
     // EFFECTS: returns the list of cards that have been matched
     //          and removed from the board
     public List<Card> getMatchedCards() {
-        return matchedCards;
+        return this.matchedCards;
     }
 
     // EFFECTS: returns the number of match guesses made so far
     public int getNumGuesses() {
         return this.numGuesses;
+    }
+
+    // EFFECTS: returns the number of successful matches made so far
+    public int getNumMatches() {
+        return this.numMatches;
     }
 }

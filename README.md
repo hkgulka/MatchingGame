@@ -18,4 +18,5 @@ Personally, this project is of interest to me because I wanted to make a fun app
 - As a user, I want to be able to select a pair of cards and view their identities/guess at a match
 - As a user, I want to be able to view the remaining (face down) cards on the board
 - As a user, I want to be able to view the number of pair guesses I have made so far
+- As a user, I want to be able to view the number of matches I have made so far
  

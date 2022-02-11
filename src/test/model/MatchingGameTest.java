@@ -12,60 +12,45 @@ import static org.junit.jupiter.api.Assertions.*;
 class MatchingGameTest {
 
     private MatchingGame testGame;
-    private Card cardA1;
-    private Card cardA2;
-    private Card cardB1;
-    private Card cardB2;
-    private Card cardC1;
-    private Card cardC2;
-
-    private List<String> actualCardIdentities;
-
 
     @BeforeEach
     void runBefore() {
         testGame = new MatchingGame();
-        cardA1 = new Card("A");
-        cardA2 = new Card("A");
-        cardB1 = new Card("B");
-        cardB2 = new Card("B");
-        cardC1 = new Card("C");
-        cardC2 = new Card("C");
-
-        actualCardIdentities = new LinkedList<String>(Arrays.asList("A", "B"));
     }
 
     @Test
     void testConstructor() {
         assertEquals(4, testGame.getCardAmount());
-        assertEquals(actualCardIdentities, testGame.getCardIdentities());
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B")), testGame.getCardIdentities());
         assertEquals(4, testGame.getUnmatchedCards().size());
+        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4)), testGame.getUnmatchedLocationNums());
         assertEquals(0, testGame.getMatchedCards().size());
         assertEquals(0, testGame.getNumGuesses());
+        assertEquals(0, testGame.getNumMatches());
     }
 
     @Test
     void testAdd1CardPair() {
         testGame.addCardPair();
-        actualCardIdentities.add("C");
 
-        assertEquals(6, testGame.getCardAmount());
-        assertEquals(actualCardIdentities, testGame.getCardIdentities());
         assertEquals(6, testGame.getUnmatchedCards().size());
+        assertEquals(6, testGame.getCardAmount());
+        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6)), testGame.getUnmatchedLocationNums());
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C")), testGame.getCardIdentities());
     }
 
     @Test
     void testAdd3CardPair() {
         testGame.addCardPair();
-        actualCardIdentities.add("C");
         testGame.addCardPair();
-        actualCardIdentities.add("D");
         testGame.addCardPair();
-        actualCardIdentities.add("E");
 
-        assertEquals(10, testGame.getCardAmount());
-        assertEquals(actualCardIdentities, testGame.getCardIdentities());
         assertEquals(10, testGame.getUnmatchedCards().size());
+        assertEquals(10, testGame.getCardAmount());
+        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
+                testGame.getUnmatchedLocationNums());
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C", "D", "E")),
+                testGame.getCardIdentities());
     }
 
     @Test
@@ -73,6 +58,17 @@ class MatchingGameTest {
         assertEquals("C", testGame.findUnusedIdentity());
         testGame.addCardPair();
         assertEquals("D", testGame.findUnusedIdentity());
+        testGame.addCardPair();
+        assertEquals("E", testGame.findUnusedIdentity());
+    }
+
+    @Test
+    void testAddNewCardIdentity() {
+        testGame.addNewCardIdentity("C");
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C")), testGame.getCardIdentities());
+
+        testGame.addNewCardIdentity("D");
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C", "D")), testGame.getCardIdentities());
     }
 
     @Test
@@ -81,47 +77,48 @@ class MatchingGameTest {
 
         assertEquals(3, testGame.getUnmatchedCards().size());
         assertEquals(1, testGame.getMatchedCards().size());
+        assertEquals(new LinkedList<>(Arrays.asList(2, 3, 4)), testGame.getUnmatchedLocationNums());
 
         testGame.removeCardFromBoard(3);
 
         assertEquals(2, testGame.getUnmatchedCards().size());
         assertEquals(2, testGame.getMatchedCards().size());
+        assertEquals(new LinkedList<>(Arrays.asList(2, 4)), testGame.getUnmatchedLocationNums());
 
         testGame.removeCardFromBoard(4);
 
         assertEquals(1, testGame.getUnmatchedCards().size());
         assertEquals(3, testGame.getMatchedCards().size());
+        assertEquals(new LinkedList<>(Arrays.asList(2)), testGame.getUnmatchedLocationNums());
     }
 
     @Test
     void testFindCard() {
-        assertNotEquals(-1, testGame.findCard(1));
-        assertNotEquals(-1, testGame.findCard(2));
-        assertNotEquals(-1, testGame.findCard(3));
-        assertNotEquals(-1, testGame.findCard(4));
-        assertEquals(-1, testGame.findCard(5));
-        assertEquals(-1, testGame.findCard(0));
+        assertNotNull(testGame.findCard(1));
+        assertNotNull(testGame.findCard(2));
+        assertNotNull(testGame.findCard(3));
+        assertNotNull(testGame.findCard(4));
+        assertNull(testGame.findCard(5));
+        assertNull(testGame.findCard(0));
     }
 
     @Test
     void testIsAMatch() {
-        assertTrue(testGame.isAMatch(cardA1, cardA2));
-        assertTrue(testGame.isAMatch(cardC1, cardC2));
+        assertTrue(testGame.isAMatch(1, 2) ||
+                testGame.isAMatch(1, 3) ||
+                testGame.isAMatch(1, 4));
 
-        assertFalse(testGame.isAMatch(cardA1, cardB2));
-        assertFalse(testGame.isAMatch(cardC2, cardB1));
-        assertFalse(testGame.isAMatch(cardA2, cardC1));
-    }
+        assertTrue(testGame.isAMatch(2, 1) ||
+                testGame.isAMatch(2, 3) ||
+                testGame.isAMatch(2, 4));
 
-    @Test
-    void testAddNewCardIdentity() {
-        testGame.addNewCardIdentity("C");
-        actualCardIdentities.add("C");
-        assertEquals(actualCardIdentities, testGame.getCardIdentities());
+        assertTrue(testGame.isAMatch(3, 1) ||
+                testGame.isAMatch(3, 2) ||
+                testGame.isAMatch(3, 4));
 
-        testGame.addNewCardIdentity("D");
-        actualCardIdentities.add("D");
-        assertEquals(actualCardIdentities, testGame.getCardIdentities());
+        assertTrue(testGame.isAMatch(4, 1) ||
+                testGame.isAMatch(4, 2) ||
+                testGame.isAMatch(4, 3));
     }
 
     @Test
@@ -131,6 +128,15 @@ class MatchingGameTest {
 
         testGame.countAnotherGuess();
         assertEquals(2, testGame.getNumGuesses());
+    }
+
+    @Test
+    void testCountAnotherMatch() {
+        testGame.countAnotherMatch();
+        assertEquals(1, testGame.getNumMatches());
+
+        testGame.countAnotherMatch();
+        assertEquals(2, testGame.getNumMatches());
     }
 
     @Test
@@ -149,17 +155,26 @@ class MatchingGameTest {
     @Test
     void testMakeBoardArrangementUniqueValues() {
         testGame.makeBoardArrangement();
-        assertFalse(testGame.getUnmatchedCards().get(0).getLocationNum() ==
+        assertNotEquals(testGame.getUnmatchedCards().get(0).getLocationNum(),
                 testGame.getUnmatchedCards().get(1).getLocationNum());
-        assertFalse(testGame.getUnmatchedCards().get(0).getLocationNum() ==
+        assertNotEquals(testGame.getUnmatchedCards().get(0).getLocationNum(),
                 testGame.getUnmatchedCards().get(2).getLocationNum());
-        assertFalse(testGame.getUnmatchedCards().get(0).getLocationNum() ==
+        assertNotEquals(testGame.getUnmatchedCards().get(0).getLocationNum(),
                 testGame.getUnmatchedCards().get(3).getLocationNum());
-        assertFalse(testGame.getUnmatchedCards().get(1).getLocationNum() ==
+        assertNotEquals(testGame.getUnmatchedCards().get(1).getLocationNum(),
                 testGame.getUnmatchedCards().get(2).getLocationNum());
-        assertFalse(testGame.getUnmatchedCards().get(1).getLocationNum() ==
+        assertNotEquals(testGame.getUnmatchedCards().get(1).getLocationNum(),
                 testGame.getUnmatchedCards().get(2).getLocationNum());
-        assertFalse(testGame.getUnmatchedCards().get(2).getLocationNum() ==
+        assertNotEquals(testGame.getUnmatchedCards().get(2).getLocationNum(),
                 testGame.getUnmatchedCards().get(3).getLocationNum());
+    }
+
+    @Test
+    void testCheckGameOver() {
+        assertFalse(testGame.checkGameOver());
+        testGame.countAnotherMatch();
+        assertFalse(testGame.checkGameOver());
+        testGame.countAnotherMatch();
+        assertTrue(testGame.checkGameOver());
     }
 }
