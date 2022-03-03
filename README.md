@@ -19,4 +19,6 @@ Personally, this project is of interest to me because I wanted to make a fun app
 - As a user, I want to be able to view the remaining (face down) cards on the board
 - As a user, I want to be able to view the number of pair guesses I have made so far
 - As a user, I want to be able to view the number of matches I have made so far
+- As a user, I want to be able to quit the game and save the game's current state to a file at any time during the game
+- As a user, I want to be able to reload the state of the game from a previous save file and continue playing it from that point
  
