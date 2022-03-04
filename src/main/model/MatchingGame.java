@@ -1,6 +1,10 @@
 package model;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -8,7 +12,7 @@ import java.util.List;
 
 // Represents a matching game with an amount of cards, list of card identities in use,
 // cards on the board, cards matched, and number of guesses made
-public class MatchingGame {
+public class MatchingGame implements Writable {
     private static final List<String> POSSIBLE_IDENTITIES = new LinkedList<>(Arrays.asList("A", "B", "C", "D",
             "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y",
             "Z"));
@@ -16,7 +20,7 @@ public class MatchingGame {
     private int cardAmount;                            // total number of cards in the game
     private List<String> cardIdentities;               // list of all card identities already in the game
     private List<Card> unmatchedCards;                 // list of all cards still on the board
-    private LinkedList<Integer> unmatchedLocationNums; // list of all the location numbers of unmatched cards
+    private LinkedList<Integer> unmatchedLocationNums;       // list of all the location numbers of unmatched cards
     private List<Card> matchedCards;                   // list of all cards matched
     private int numGuesses;                            // number of guesses made
     private int numMatches;                            // number of matches made
@@ -34,6 +38,21 @@ public class MatchingGame {
         this.numGuesses = 0;
         this.numMatches = 0;
         makeBoardArrangement();
+    }
+
+    // EFFECTS: constructs a game with a given number of cards, a list of card identities in use,
+    //          a list of all cards on the board, a list of the location numbers on the board (already arranged),
+    //          a list of cards matched, number of guesses made, and number of matches made
+    public MatchingGame(int cardAmount, List<String> cardIdentities, List<Card> unmatchedCards,
+                        LinkedList<Integer> unmatchedLocationNums, List<Card> matchedCards, int numGuesses,
+                        int numMatches) {
+        this.cardAmount = cardAmount;
+        this.cardIdentities = cardIdentities;
+        this.unmatchedCards = unmatchedCards;
+        this.unmatchedLocationNums = unmatchedLocationNums;
+        this.matchedCards = matchedCards;
+        this.numGuesses = numGuesses;
+        this.numMatches = numMatches;
     }
 
     // REQUIRES: cardAmount / 2 + 1 <= the number of items in POSSIBLE_IDENTITIES
@@ -171,5 +190,41 @@ public class MatchingGame {
     // EFFECTS: returns the number of successful matches made so far
     public int getNumMatches() {
         return this.numMatches;
+    }
+
+    // Method taken and adapted from WorkRoom class in
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("card amount", this.cardAmount);
+        json.put("card identities", stringsToJsonArray(this.cardIdentities));
+        json.put("unmatched cards", cardsToJsonArray(this.unmatchedCards));
+        json.put("unmatched location numbers", integersToJsonArray(this.unmatchedLocationNums));
+        json.put("matched cards", cardsToJsonArray(this.matchedCards));
+        json.put("number of guesses", this.numGuesses);
+        json.put("number of matches", this.numMatches);
+        return json;
+    }
+
+    // Method taken and adapted from WorkRoom class in
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    // EFFECTS: returns a list of cards as a JSON array
+    private JSONArray cardsToJsonArray(List<Card> cards) {
+        JSONArray jsonArray = new JSONArray();
+        for (Card c : cards) {
+            jsonArray.put(c.toJson());
+        }
+        return jsonArray;
+    }
+
+    // EFFECTS: returns a list of integers as a JSON array
+    private JSONArray integersToJsonArray(List<Integer> integers) {
+        return new JSONArray(integers);
+    }
+
+    // EFFECTS: returns a list of strings as a JSON array
+    private JSONArray stringsToJsonArray(List<String> strings) {
+        return new JSONArray(strings);
     }
 }

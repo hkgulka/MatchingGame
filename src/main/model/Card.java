@@ -1,7 +1,11 @@
 package model;
 
+import netscape.javascript.JSObject;
+import org.json.JSONObject;
+import persistence.Writable;
+
 // Represents a card having an identity, location number, and status (matched/true or unmatched/false)
-public class Card {
+public class Card implements Writable {
 
     private String identity;  // unique identity shared only by 2 cards (a pair)
     private int locationNum;  // the location of the card on the board
@@ -13,6 +17,13 @@ public class Card {
         this.identity = identity;
         this.locationNum = 0;
         this.status = false;
+    }
+
+    // EFFECTS: constructs a card with an identity, a location number, and a status
+    public Card(String identity, int locationNum, boolean status) {
+        this.identity = identity;
+        this.locationNum = locationNum;
+        this.status = status;
     }
 
     // REQUIRES: the status of the card is unmatched (false)
@@ -42,5 +53,16 @@ public class Card {
     // EFFECTS: returns true if the card has been matched, false if it has not
     public boolean getStatus() {
         return this.status;
+    }
+
+    // Method taken and adapted from Thingy class in
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("identity", this.identity);
+        json.put("location number", this.locationNum);
+        json.put("status", this.status);
+        return json;
     }
 }

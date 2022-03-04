@@ -1,0 +1,38 @@
+{
+    "unmatched location numbers": [
+        1,
+        2,
+        3,
+        4
+    ],
+    "matched cards": [],
+    "card identities": [
+        "A",
+        "B"
+    ],
+    "unmatched cards": [
+        {
+            "location number": 3,
+            "identity": "A",
+            "status": false
+        },
+        {
+            "location number": 2,
+            "identity": "A",
+            "status": false
+        },
+        {
+            "location number": 1,
+            "identity": "B",
+            "status": false
+        },
+        {
+            "location number": 4,
+            "identity": "B",
+            "status": false
+        }
+    ],
+    "card amount": 4,
+    "number of guesses": 0,
+    "number of matches": 0
+}

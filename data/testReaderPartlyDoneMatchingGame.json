@@ -1,0 +1,48 @@
+{
+  "card amount": 6,
+  "card identities": [
+    "A",
+    "B",
+    "C"
+  ],
+  "unmatched cards": [
+    {
+      "identity":  "C",
+      "location number": 1,
+      "status": false
+    },
+    {
+      "identity":  "C",
+      "location number": 5,
+      "status": false
+    }
+  ],
+  "unmatched location numbers": [
+    1,
+    5
+  ],
+  "matched cards": [
+    {
+      "identity":  "A",
+      "location number": 3,
+      "status": true
+    },
+    {
+      "identity":  "A",
+      "location number": 4,
+      "status": true
+    },
+    {
+      "identity":  "B",
+      "location number": 2,
+      "status": true
+    },
+    {
+      "identity":  "B",
+      "location number": 6,
+      "status": true
+    }
+  ],
+  "number of guesses": 5,
+  "number of matches": 2
+}
