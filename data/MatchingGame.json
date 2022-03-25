@@ -1,76 +1,54 @@
 {
     "unmatched location numbers": [
-        1,
         2,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
+        4
     ],
     "matched cards": [
         {
-            "location number": 3,
-            "identity": "D",
+            "location number": 6,
+            "being guessed": true,
+            "identity": "A",
             "status": true
         },
         {
-            "location number": 10,
-            "identity": "D",
+            "location number": 5,
+            "being guessed": true,
+            "identity": "A",
+            "status": true
+        },
+        {
+            "location number": 1,
+            "being guessed": true,
+            "identity": "B",
+            "status": true
+        },
+        {
+            "location number": 3,
+            "being guessed": true,
+            "identity": "B",
             "status": true
         }
     ],
     "card identities": [
         "A",
         "B",
-        "C",
-        "D",
-        "E"
+        "C"
     ],
     "unmatched cards": [
         {
-            "location number": 1,
-            "identity": "A",
-            "status": false
-        },
-        {
-            "location number": 5,
-            "identity": "A",
-            "status": false
-        },
-        {
             "location number": 4,
-            "identity": "B",
-            "status": false
-        },
-        {
-            "location number": 8,
-            "identity": "B",
-            "status": false
-        },
-        {
-            "location number": 9,
+            "being guessed": false,
             "identity": "C",
             "status": false
         },
         {
             "location number": 2,
+            "being guessed": true,
             "identity": "C",
-            "status": false
-        },
-        {
-            "location number": 7,
-            "identity": "E",
-            "status": false
-        },
-        {
-            "location number": 6,
-            "identity": "E",
             "status": false
         }
     ],
-    "card amount": 10,
-    "number of guesses": 6,
-    "number of matches": 1
+    "card amount": 6,
+    "number of guesses": 5,
+    "number of matches": 2
 }

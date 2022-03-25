@@ -125,6 +125,14 @@ public class MatchingGame implements Writable {
     }
 
     // MODIFIES: this
+    // EFFECTS: guesses the card with the location number n
+    public void guessACard(int n) {
+        if (findCard(n) != null) {
+            findCard(n).guessCard();
+        }
+    }
+
+    // MODIFIES: this
     // EFFECTS: adds 1 to the number of guesses made
     public void countAnotherGuess() {
         this.numGuesses = this.numGuesses + 1;

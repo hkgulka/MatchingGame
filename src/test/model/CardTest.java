@@ -19,6 +19,7 @@ public class CardTest {
         assertEquals("A", testCard.getIdentity());
         assertEquals(0, testCard.getLocationNum());
         assertFalse(testCard.getStatus());
+        assertFalse(testCard.isBeingGuessed());
     }
 
     @Test
@@ -34,5 +35,14 @@ public class CardTest {
 
         testCard.changeLocationNum(1);
         assertEquals(1, testCard.getLocationNum());
+    }
+
+    @Test
+    void testGuessCard() {
+        testCard.guessCard();
+        assertTrue(testCard.isBeingGuessed());
+
+        testCard.unGuessCard();
+        assertFalse(testCard.isBeingGuessed());
     }
 }

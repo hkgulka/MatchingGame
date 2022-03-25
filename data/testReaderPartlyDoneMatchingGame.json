@@ -9,12 +9,14 @@
     {
       "identity":  "C",
       "location number": 1,
-      "status": false
+      "status": false,
+      "being guessed": false
     },
     {
       "identity":  "C",
       "location number": 5,
-      "status": false
+      "status": false,
+      "being guessed": false
     }
   ],
   "unmatched location numbers": [
@@ -25,22 +27,26 @@
     {
       "identity":  "A",
       "location number": 3,
-      "status": true
+      "status": true,
+      "being guessed": true
     },
     {
       "identity":  "A",
       "location number": 4,
-      "status": true
+      "status": true,
+      "being guessed": true
     },
     {
       "identity":  "B",
       "location number": 2,
-      "status": true
+      "status": true,
+      "being guessed": true
     },
     {
       "identity":  "B",
       "location number": 6,
-      "status": true
+      "status": true,
+      "being guessed": true
     }
   ],
   "number of guesses": 5,

@@ -100,6 +100,7 @@ public class JsonReader {
         String identity = jsonObject.getString("identity");
         int locationNum = jsonObject.getInt("location number");
         boolean status = jsonObject.getBoolean("status");
-        return new Card(identity, locationNum, status);
+        boolean beingGuessed = jsonObject.getBoolean("being guessed");
+        return new Card(identity, locationNum, status, beingGuessed);
     }
 }

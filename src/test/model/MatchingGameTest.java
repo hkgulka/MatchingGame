@@ -199,4 +199,21 @@ class MatchingGameTest {
         testGame.countAnotherMatch();
         assertTrue(testGame.checkGameOver());
     }
+
+    @Test
+    void testGuessACard() {
+        assertFalse(testGame.findCard(1).isBeingGuessed());
+        testGame.guessACard(1);
+        assertTrue(testGame.findCard(1).isBeingGuessed());
+
+        assertFalse(testGame.findCard(4).isBeingGuessed());
+        testGame.guessACard(4);
+        assertTrue(testGame.findCard(4).isBeingGuessed());
+
+        testGame.guessACard(5);
+        assertTrue(testGame.findCard(1).isBeingGuessed());
+        assertFalse(testGame.findCard(2).isBeingGuessed());
+        assertFalse(testGame.findCard(3).isBeingGuessed());
+        assertTrue(testGame.findCard(4).isBeingGuessed());
+    }
 }

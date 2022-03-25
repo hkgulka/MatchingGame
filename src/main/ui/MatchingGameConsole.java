@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 // An application for a matching game
-public class MatchingGameApp {
+public class MatchingGameConsole {
     private static final String JSON_STORE = "./data/MatchingGame.json";
     private MatchingGame game;
     private Scanner input;
@@ -21,7 +21,7 @@ public class MatchingGameApp {
 
     // EFFECTS: runs the matching game application and creates a new JSON writer and
     //          JSON reader
-    public MatchingGameApp() {
+    public MatchingGameConsole() {
         this.jsonWriter = new JsonWriter(JSON_STORE);
         this.jsonReader = new JsonReader(JSON_STORE);
         this.input = new Scanner(System.in);

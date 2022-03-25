@@ -5,25 +5,29 @@
       "B"
   ],
   "unmatched cards": [
-      {
+    {
       "identity":  "B",
       "location number": 1,
-      "status": false
-      },
+      "status": false,
+      "being guessed": false
+    },
     {
       "identity":  "A",
       "location number": 2,
-      "status": false
+      "status": false,
+      "being guessed": false
     },
     {
       "identity":  "A",
       "location number": 3,
-      "status": false
+      "status": false,
+      "being guessed": false
     },
     {
       "identity":  "B",
       "location number": 4,
-      "status": false
+      "status": false,
+      "being guessed": false
     }
   ],
   "unmatched location numbers": [

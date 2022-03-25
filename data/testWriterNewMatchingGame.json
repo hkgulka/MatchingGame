@@ -12,22 +12,26 @@
     ],
     "unmatched cards": [
         {
-            "location number": 3,
+            "location number": 1,
+            "being guessed": false,
             "identity": "A",
             "status": false
         },
         {
             "location number": 2,
+            "being guessed": false,
             "identity": "A",
             "status": false
         },
         {
-            "location number": 1,
+            "location number": 4,
+            "being guessed": false,
             "identity": "B",
             "status": false
         },
         {
-            "location number": 4,
+            "location number": 3,
+            "being guessed": false,
             "identity": "B",
             "status": false
         }
