@@ -61,16 +61,18 @@ public class MatchingGame implements Writable {
     //          them a unique identity, marks that identity as used, makes a new list of location numbers
     //          for cards on the board, then rearranges the board
     public void addCardPair() {
-        String unusedIdentity = findUnusedIdentity();
-        this.unmatchedCards.add(new Card(unusedIdentity));
-        this.unmatchedCards.add(new Card(unusedIdentity));
-        this.cardAmount = this.cardAmount + 2;
-        this.unmatchedLocationNums = new LinkedList<>();
-        for (int i = 1; i <= this.unmatchedCards.size(); ++i) {
-            this.unmatchedLocationNums.add(i);
+        if (cardIdentities.size() <= 3) {
+            String unusedIdentity = findUnusedIdentity();
+            this.unmatchedCards.add(new Card(unusedIdentity));
+            this.unmatchedCards.add(new Card(unusedIdentity));
+            this.cardAmount = this.cardAmount + 2;
+            this.unmatchedLocationNums = new LinkedList<>();
+            for (int i = 1; i <= this.unmatchedCards.size(); ++i) {
+                this.unmatchedLocationNums.add(i);
+            }
+            addNewCardIdentity(unusedIdentity);
+            makeBoardArrangement();
         }
-        addNewCardIdentity(unusedIdentity);
-        makeBoardArrangement();
     }
 
     // EFFECTS: finds the first identity in POSSIBLE_IDENTITIES that is not in cardIdentities; returns null

@@ -39,16 +39,23 @@ class MatchingGameTest {
     }
 
     @Test
-    void testAdd3CardPair() {
-        testGame.addCardPair();
+    void testAddCardPairTooManyPairs() {
         testGame.addCardPair();
         testGame.addCardPair();
 
-        assertEquals(10, testGame.getUnmatchedCards().size());
-        assertEquals(10, testGame.getCardAmount());
-        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
+        assertEquals(8, testGame.getUnmatchedCards().size());
+        assertEquals(8, testGame.getCardAmount());
+        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8)),
                 testGame.getUnmatchedLocationNums());
-        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C", "D", "E")),
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C", "D")),
+                testGame.getCardIdentities());
+
+        testGame.addCardPair();
+        assertEquals(8, testGame.getUnmatchedCards().size());
+        assertEquals(8, testGame.getCardAmount());
+        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8)),
+                testGame.getUnmatchedLocationNums());
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C", "D")),
                 testGame.getCardIdentities());
     }
 
@@ -81,7 +88,7 @@ class MatchingGameTest {
         testGame.addCardPair();
         testGame.addCardPair();
         testGame.addCardPair();
-     assertNull(testGame.findUnusedIdentity());
+     assertEquals("E", testGame.findUnusedIdentity());
     }
 
     @Test

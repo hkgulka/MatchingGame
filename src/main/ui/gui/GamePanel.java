@@ -9,8 +9,8 @@ import java.awt.*;
 // Represents the panel that displays the starting, menu, game, and game over screens
 public class GamePanel extends JPanel {
 
-    private static final int CARD_WIDTH = 60;
-    private static final int CARD_HEIGHT = 100;
+    private static final int CARD_WIDTH = 80;
+    private static final int CARD_HEIGHT = 120;
     private static final int MARGIN = 20;
     private MatchingGame game;
     private int width;
