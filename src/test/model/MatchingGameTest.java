@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import static model.MatchingGame.POSSIBLE_IDENTITIES;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatchingGameTest {
@@ -89,6 +90,11 @@ class MatchingGameTest {
         testGame.addCardPair();
         testGame.addCardPair();
      assertEquals("E", testGame.findUnusedIdentity());
+
+     for (String s : POSSIBLE_IDENTITIES) {
+         testGame.addNewCardIdentity(s);
+     }
+     assertNull(testGame.findUnusedIdentity());
     }
 
     @Test

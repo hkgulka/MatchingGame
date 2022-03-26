@@ -53,14 +53,14 @@ public class GamePanel extends JPanel {
             if (c.isBeingGuessed()) {
                 drawCardIdentity(n, c, g);
             } else {
-                drawCardNumber(n, c, g);
+                drawCardNumber(n, g);
             }
         }
     }
 
     // MODIFIES: g
     // EFFECTS: draws the number of a card
-    private void drawCardNumber(int n, Card c, Graphics g) {
+    private void drawCardNumber(int n, Graphics g) {
         String num = String.valueOf(n);
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", 20, 40));
