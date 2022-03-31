@@ -1,67 +1,50 @@
 {
     "unmatched location numbers": [
+        1,
+        2,
         4,
-        5
+        6
     ],
     "matched cards": [
         {
-            "location number": 6,
-            "being guessed": true,
-            "identity": "A",
-            "status": true
-        },
-        {
             "location number": 3,
-            "being guessed": true,
             "identity": "A",
             "status": true
         },
         {
-            "location number": 8,
-            "being guessed": true,
-            "identity": "C",
-            "status": true
-        },
-        {
-            "location number": 2,
-            "being guessed": true,
-            "identity": "C",
-            "status": true
-        },
-        {
-            "location number": 1,
-            "being guessed": true,
-            "identity": "D",
-            "status": true
-        },
-        {
-            "location number": 7,
-            "being guessed": true,
-            "identity": "D",
+            "location number": 5,
+            "identity": "A",
             "status": true
         }
     ],
     "card identities": [
         "A",
         "B",
-        "C",
-        "D"
+        "C"
     ],
     "unmatched cards": [
         {
-            "location number": 4,
-            "being guessed": false,
+            "location number": 2,
             "identity": "B",
             "status": false
         },
         {
-            "location number": 5,
-            "being guessed": false,
+            "location number": 6,
             "identity": "B",
+            "status": false
+        },
+        {
+            "location number": 1,
+            "identity": "C",
+            "status": false
+        },
+        {
+            "location number": 4,
+            "identity": "C",
             "status": false
         }
     ],
-    "card amount": 8,
-    "number of guesses": 13,
-    "number of matches": 3
+    "card amount": 6,
+    "number of guesses": 2,
+    "number of matches": 1
 }

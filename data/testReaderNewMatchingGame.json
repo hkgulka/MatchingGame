@@ -8,26 +8,22 @@
     {
       "identity":  "B",
       "location number": 1,
-      "status": false,
-      "being guessed": false
+      "status": false
     },
     {
       "identity":  "A",
       "location number": 2,
-      "status": false,
-      "being guessed": false
+      "status": false
     },
     {
       "identity":  "A",
       "location number": 3,
-      "status": false,
-      "being guessed": false
+      "status": false
     },
     {
       "identity":  "B",
       "location number": 4,
-      "status": false,
-      "being guessed": false
+      "status": false
     }
   ],
   "unmatched location numbers": [

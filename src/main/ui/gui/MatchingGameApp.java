@@ -11,11 +11,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 // Represents a matching game application with a graphical user interface
-public class MatchingGameApp extends JFrame {
+public class MatchingGameApp extends JFrame implements ActionListener {
 
-    private static final int INTERVAL = 20;
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 800;
     private MatchingGame game;
@@ -23,15 +23,15 @@ public class MatchingGameApp extends JFrame {
     private MenuPanel mp;
     private GamePanel gp;
     private ScorePanel scp;
-    private Timer timer;
+    private GameOverPanel gop;
+    private QuittingPopUp qp;
+    private Popup popup;
 
     private static final String JSON_STORE = "./data/MatchingGame.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
-    private boolean inStart;
-    private boolean inMenu;
-    private boolean inGame;
     private List<Integer> guesses;
+    private ScheduledExecutorService schedule;
 
     // EFFECTS: constructs a matching game app with a starting window
     public MatchingGameApp() {
@@ -39,22 +39,21 @@ public class MatchingGameApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setUndecorated(true);
         game = new MatchingGame();
-        stp = new StartPanel(WIDTH, HEIGHT);
-        mp = new MenuPanel(WIDTH, HEIGHT, game);
-        gp = new GamePanel(WIDTH, HEIGHT, game);
+        stp = new StartPanel(WIDTH, HEIGHT, this);
+        mp = new MenuPanel(WIDTH, HEIGHT, game, this);
+        gp = new GamePanel(WIDTH, HEIGHT, game, this);
         scp = new ScorePanel(game);
+        gop = new GameOverPanel(WIDTH, HEIGHT, game);
+        qp = new QuittingPopUp(this);
+        PopupFactory pf = new PopupFactory();
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        popup = pf.getPopup(this, qp, (screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
         add(stp);
-        addKeyListener(new KeyHandler());
         pack();
         centreOnScreen();
         setVisible(true);
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
-        inStart = true;
-        inMenu = false;
-        inGame = false;
-        addTimer();
-        timer.start();
         guesses = new ArrayList<>();
     }
 
@@ -65,48 +64,31 @@ public class MatchingGameApp extends JFrame {
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
     }
 
-    // EFFECTS: initializes a timer that updates the game each
-    //          INTERVAL milliseconds
-    private void addTimer() {
-        timer = new Timer(INTERVAL, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                mp.repaint();
-                gp.repaint();
-                scp.update();
-
-            }
-        });
-    }
-
-    // Represents a key handler to respond to key events
-    private class KeyHandler extends KeyAdapter {
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            int keyCode = e.getKeyCode();
-
-            if (keyCode == KeyEvent.VK_Q) {
-                System.exit(0);
-            } else if (keyCode == KeyEvent.VK_S) {
-                saveToFile();
-                System.exit(0);
-            } else if (keyCode == KeyEvent.VK_N && inStart) {
-                newGame();
-            } else if (keyCode == KeyEvent.VK_L && inStart) {
-                loadGameFromSave();
-            } else if (keyCode == KeyEvent.VK_A && inMenu) {
-                game.addCardPair();
-            } else if (keyCode == KeyEvent.VK_P && inMenu) {
-                playGame();
-            } else if (inGame) {
-                try {
-                    int i = Integer.parseInt(String.valueOf(e.getKeyChar()));
-                    handleNumberGuessed(i);
-                } catch (NumberFormatException n) {
-                    // nothing happens
-                }
-            }
+    // MODIFIES: this
+    // EFFECTS: responds to each specific ActionEvent
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("new game")) {
+            newGame();
+        } else if (e.getActionCommand().equals("load game")) {
+            loadGameFromSave();
+        } else if (e.getActionCommand().equals("add cards")) {
+            game.addCardPair();
+            mp.updateText();
+        } else if (e.getActionCommand().equals("play game")) {
+            playGame();
+        } else if (e.getActionCommand().equals("leave game")) {
+            quitGame();
+        } else if (e.getActionCommand().equals("quit")) {
+            System.exit(0);
+        } else if (e.getActionCommand().equals("save and quit")) {
+            saveToFile();
+            System.exit(0);
+        } else if (e.getActionCommand().equals("cancel")) {
+            returnToGame();
+        } else {
+            int i = Integer.parseInt(e.getActionCommand());
+            handleNumberGuessed(i);
         }
     }
 
@@ -122,12 +104,9 @@ public class MatchingGameApp extends JFrame {
         }
     }
 
-
     // MODIFIES: this
     // EFFECTS: plays the new matching game and advances beyond the starting screen
     private void newGame() {
-        inStart = false;
-        inMenu = true;
         remove(stp);
         add(mp);
         pack();
@@ -138,7 +117,6 @@ public class MatchingGameApp extends JFrame {
     private void loadGameFromSave() {
         try {
             this.game = jsonReader.read();
-            inStart = false;
             remove(stp);
             playGame();
         } catch (IOException io) {
@@ -146,16 +124,11 @@ public class MatchingGameApp extends JFrame {
         }
     }
 
-
     // MODIFIES: this
-    // EFFECTS: plays the matching game
+    // EFFECTS: plays the matching game by adding the game and score panels
     private void playGame() {
-        if (inMenu) {
-            remove(mp);
-            inMenu = false;
-        }
-        inGame = true;
-        gp = new GamePanel(WIDTH, HEIGHT, game);
+        remove(mp);
+        gp = new GamePanel(WIDTH, HEIGHT, game, this);
         scp = new ScorePanel(game);
         add(gp);
         add(scp, BorderLayout.NORTH);
@@ -163,32 +136,66 @@ public class MatchingGameApp extends JFrame {
     }
 
     // MODIFIES: this
-    // EFFECTS: handles a number being guessed
+    // EFFECTS: handles a card location number being guessed
     private void handleNumberGuessed(int n) {
-        if (guesses.size() == 0 && game.getUnmatchedLocationNums().contains(n)) {
-            game.guessACard(n);
+        if (guesses.size() == 0) {
             guesses.add(n);
-        } else if (guesses.size() == 1 && game.getUnmatchedLocationNums().contains(n)) {
-            game.guessACard(n);
+            gp.showCardIdentity(n);
+        } else if (guesses.size() == 1 && n != guesses.get(0)) {
             guesses.add(n);
-            guessAPair();
+            gp.showCardIdentity(n);
+            schedule = Executors.newSingleThreadScheduledExecutor();
+            schedule.schedule(this::guessAPair, 1, TimeUnit.SECONDS);
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: handles a pair of cards being guessed
-    private void guessAPair() {
+    // EFFECTS: handles a pair of card location numbers being guessed
+    public void guessAPair() {
         int n1 = guesses.get(0);
         int n2 = guesses.get(1);
         game.countAnotherGuess();
         if (game.isAMatch(n1, n2)) {
             game.countAnotherMatch();
+            gp.removeCardFromPlay(n1);
+            gp.removeCardFromPlay(n2);
             game.removeCardFromBoard(n1);
             game.removeCardFromBoard(n2);
         } else {
-            game.findCard(n1).unGuessCard();
-            game.findCard(n2).unGuessCard();
+            gp.hideCardIdentity(n1);
+            gp.hideCardIdentity(n2);
         }
+        scp.update();
         guesses.clear();
+        if (game.checkGameOver()) {
+            schedule.schedule(this::gameOver, 1, TimeUnit.SECONDS);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: displays an end-game panel with game stats
+    private void gameOver() {
+        remove(gp);
+        remove(scp);
+        gop = new GameOverPanel(WIDTH, HEIGHT, game);
+        add(gop);
+        pack();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: displays a popup panel with options for quitting the game, saving and quitting, and
+    //          returning to the game
+    private void quitGame() {
+        PopupFactory pf = new PopupFactory();
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        popup = pf.getPopup(this, qp, (screen.width - 350) / 2,
+                (screen.height - 200) / 2);
+        popup.show();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: hides the popup window displaying quitting options
+    private void returnToGame() {
+        popup.hide();
     }
 }

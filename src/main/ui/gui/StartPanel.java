@@ -1,6 +1,6 @@
 package ui.gui;
 
-import model.MatchingGame;
+import javafx.scene.shape.Rectangle;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,51 +8,78 @@ import java.awt.*;
 // Represents a panel that shows up upon starting the application
 public class StartPanel extends JPanel {
 
-    private static final int MARGIN = 20;
+    private static final int MARGIN = 24;
     private int width;
     private int height;
+    private JLabel icon;
+    private JTextArea text;
+    private JButton newGameButton;
+    private JButton loadGameButton;
+    private MatchingGameApp gameApp;
 
-    // EFFECTS: constructs a start panel with a size and background colour of panel
-    public StartPanel(int width, int height) {
-        setPreferredSize(new Dimension(width, height));
-        setBackground(Color.BLACK);
+    // EFFECTS: constructs a start panel with a corresponding game app, a size and background colour of panel, an
+    //          icon image, a text label, and two menu buttons
+    public StartPanel(int width, int height, MatchingGameApp m) {
         this.width = width;
         this.height = height;
+        this.gameApp = m;
+        setPreferredSize(new Dimension(width, height));
+        setBackground(Color.BLACK);
+        setLayout(new FlowLayout(FlowLayout.CENTER, 1000, 40));
+        JPanel box = new JPanel();
+        box.setSize(width, height / 2);
+        box.setBackground(Color.BLACK);
+        add(box);
+        ImageIcon image = new ImageIcon("MatchingGame.png");
+        this.icon = new JLabel(image);
+        add(icon);
+        initializeText();
+        initializeButtons();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawStart(g);
+    // MODIFIES: this
+    // EFFECTS: initializes the menu buttons for the panel
+    private void initializeButtons() {
+        this.newGameButton = new JButton("START A NEW GAME");
+        newGameButton.setActionCommand("new game");
+        this.loadGameButton = new JButton("LOAD A GAME FROM SAVE");
+        loadGameButton.setActionCommand("load game");
+
+        JPanel menuArea = new JPanel();
+        menuArea.setLayout(new GridLayout(0,1));
+        add(menuArea);
+
+        customizeButton(newGameButton, menuArea);
+        customizeButton(loadGameButton, menuArea);
     }
 
-    // MODIFIES: g
-    // EFFECTS: draws the starting panel onto g
-    private void drawStart(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", 20, 20));
-        FontMetrics fm = g.getFontMetrics();
-        centreString("Welcome to the Matching Game!", g, fm, height / 2 - 2 * MARGIN);
-        g.setFont(new Font("Arial", 20, 16));
-        fm = g.getFontMetrics();
-        centreString("Each card in the game has an 'identity'. Your goal is to guess all", g, fm,
-                height / 2);
-        centreString("of the pairs of cards with matching identities, without seeing those", g, fm,
-                height / 2 + MARGIN);
-        centreString("identities all at once. When you guess a card, its identity will be", g, fm,
-                height / 2 + 2 * MARGIN);
-        centreString("temporarily revealed to you -- try to remember it for later guesses!", g, fm,
-                height / 2 + 3 * MARGIN);
-        centreString("(N) Start a New Game", g, fm,
-                height / 2 + 5 * MARGIN);
-        centreString("(L) Load a Previous Game from File", g, fm,
-                height / 2 + 6 * MARGIN);
+    // MODIFIES: this
+    // EFFECTS: customizes a button and adds it to p
+    private void customizeButton(JButton b, JPanel p) {
+        b.addActionListener(gameApp);
+        b.setForeground(Color.BLACK);
+        b.setBackground(Color.WHITE);
+        b.setFont(new Font("Arial", Font.BOLD, 18));
+        b.setFocusable(false);
+        p.add(b);
     }
 
-    // MODIFIES: g
-    // EFFECTS: centres the string str onto g at vertical position y
-    private void centreString(String str, Graphics g, FontMetrics fm, int y) {
-        int width = fm.stringWidth(str);
-        g.drawString(str, (this.width - width) / 2, y);
+    // MODIFIES: this
+    // EFFECTS: initializes and customizes a text component
+    public void initializeText() {
+        text = new JTextArea(
+                "Each card in the game has an 'identity'. Your goal is to guess all "
+                        + "of the pairs of cards with matching identities, without seeing those "
+                        + "identities all at once. When you guess a card, its identity will be "
+                        + "temporarily revealed to you -- try to remember it for later guesses!"
+        );
+        text.setSize(width / 2, height / 4);
+        text.setFont(new Font("Arial", Font.PLAIN, 20));
+        text.setLineWrap(true);
+        text.setWrapStyleWord(true);
+        text.setEditable(false);
+        text.setForeground(Color.WHITE);
+        text.setBackground(Color.BLACK);
+        add(text);
     }
 }

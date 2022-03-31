@@ -17,7 +17,6 @@ public class JsonWriterTest {
     @Test
     void testWriterInvalidFile() {
         try {
-            MatchingGame mg = new MatchingGame();
             JsonWriter writer = new JsonWriter("./data/n\0tAFileName.json");
             writer.open();
             fail("IOException was supposed to be thrown, but wasn't");

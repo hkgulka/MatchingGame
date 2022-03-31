@@ -40,7 +40,7 @@ class MatchingGameTest {
     }
 
     @Test
-    void testAddCardPairTooManyPairs() {
+    void testAddCardPairs() {
         testGame.addCardPair();
         testGame.addCardPair();
 
@@ -52,11 +52,11 @@ class MatchingGameTest {
                 testGame.getCardIdentities());
 
         testGame.addCardPair();
-        assertEquals(8, testGame.getUnmatchedCards().size());
-        assertEquals(8, testGame.getCardAmount());
-        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8)),
+        assertEquals(10, testGame.getUnmatchedCards().size());
+        assertEquals(10, testGame.getCardAmount());
+        assertEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
                 testGame.getUnmatchedLocationNums());
-        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C", "D")),
+        assertEquals(new LinkedList<>(Arrays.asList("A", "B", "C", "D", "E")),
                 testGame.getCardIdentities());
     }
 
@@ -89,12 +89,7 @@ class MatchingGameTest {
         testGame.addCardPair();
         testGame.addCardPair();
         testGame.addCardPair();
-     assertEquals("E", testGame.findUnusedIdentity());
-
-     for (String s : POSSIBLE_IDENTITIES) {
-         testGame.addNewCardIdentity(s);
-     }
-     assertNull(testGame.findUnusedIdentity());
+        assertNull(testGame.findUnusedIdentity());
     }
 
     @Test
@@ -211,22 +206,5 @@ class MatchingGameTest {
         assertFalse(testGame.checkGameOver());
         testGame.countAnotherMatch();
         assertTrue(testGame.checkGameOver());
-    }
-
-    @Test
-    void testGuessACard() {
-        assertFalse(testGame.findCard(1).isBeingGuessed());
-        testGame.guessACard(1);
-        assertTrue(testGame.findCard(1).isBeingGuessed());
-
-        assertFalse(testGame.findCard(4).isBeingGuessed());
-        testGame.guessACard(4);
-        assertTrue(testGame.findCard(4).isBeingGuessed());
-
-        testGame.guessACard(5);
-        assertTrue(testGame.findCard(1).isBeingGuessed());
-        assertFalse(testGame.findCard(2).isBeingGuessed());
-        assertFalse(testGame.findCard(3).isBeingGuessed());
-        assertTrue(testGame.findCard(4).isBeingGuessed());
     }
 }

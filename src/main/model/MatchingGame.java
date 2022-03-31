@@ -61,7 +61,7 @@ public class MatchingGame implements Writable {
     //          them a unique identity, marks that identity as used, makes a new list of location numbers
     //          for cards on the board, then rearranges the board
     public void addCardPair() {
-        if (cardIdentities.size() <= 3) {
+        if (cardIdentities.size() < POSSIBLE_IDENTITIES.size()) {
             String unusedIdentity = findUnusedIdentity();
             this.unmatchedCards.add(new Card(unusedIdentity));
             this.unmatchedCards.add(new Card(unusedIdentity));
@@ -124,14 +124,6 @@ public class MatchingGame implements Writable {
         Card c1 = findCard(locationNum1);
         Card c2 = findCard(locationNum2);
         return c1.getIdentity().equals(c2.getIdentity());
-    }
-
-    // MODIFIES: this
-    // EFFECTS: guesses the card with the location number n
-    public void guessACard(int n) {
-        if (findCard(n) != null) {
-            findCard(n).guessCard();
-        }
     }
 
     // MODIFIES: this
