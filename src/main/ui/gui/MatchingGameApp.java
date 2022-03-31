@@ -1,5 +1,7 @@
 package ui.gui;
 
+import model.Event;
+import model.EventLog;
 import model.MatchingGame;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -82,8 +84,7 @@ public class MatchingGameApp extends JFrame implements ActionListener {
         } else if (e.getActionCommand().equals("quit")) {
             System.exit(0);
         } else if (e.getActionCommand().equals("save and quit")) {
-            saveToFile();
-            System.exit(0);
+            saveAndQuit();
         } else if (e.getActionCommand().equals("cancel")) {
             returnToGame();
         } else {
@@ -94,11 +95,12 @@ public class MatchingGameApp extends JFrame implements ActionListener {
 
     // MODIFIES: this
     // EFFECTS: saves the current state of the game to JSON_STORE
-    private void saveToFile() {
+    private void saveAndQuit() {
         try {
             this.jsonWriter.open();
             this.jsonWriter.write(this.game);
             this.jsonWriter.close();
+            System.exit(0);
         } catch (FileNotFoundException f) {
             // does nothing (no file to save to)
         }
@@ -198,4 +200,5 @@ public class MatchingGameApp extends JFrame implements ActionListener {
     private void returnToGame() {
         popup.hide();
     }
+
 }

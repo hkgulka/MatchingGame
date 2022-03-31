@@ -22,3 +22,55 @@ Personally, this project is of interest to me because I wanted to make a fun app
 - As a user, I want to be able to quit the game and have the option to save the game's current state to a file at any time during the game
 - As a user, when I start the game I want to have the option to reload the state of the game from a previous save file and continue playing it from that point
  
+
+## Phase 4: Task 2
+
+Here is a sample of the events that may be logged when a typical Matching Game is played:
+
+Wed Mar 30 23:22:28 PDT 2022
+
+Added a pair of cards with identity 'C' to the game.
+
+Wed Mar 30 23:22:33 PDT 2022
+
+Added a pair of cards with identity 'D' to the game.
+
+Wed Mar 30 23:22:40 PDT 2022
+
+Guessed a match between card at location 2 and card at location 8.
+
+Wed Mar 30 23:22:44 PDT 2022
+
+Guessed a match between card at location 1 and card at location 7.
+
+Wed Mar 30 23:22:48 PDT 2022
+
+Guessed a match between card at location 3 and card at location 1.
+
+Wed Mar 30 23:22:48 PDT 2022
+
+Match found for cards with identity 'D'.
+
+Wed Mar 30 23:22:53 PDT 2022
+
+Guessed a match between card at location 4 and card at location 2.
+
+Wed Mar 30 23:22:53 PDT 2022
+
+Match found for cards with identity 'A'.
+
+Wed Mar 30 23:22:57 PDT 2022
+
+Guessed a match between card at location 7 and card at location 6.
+
+Wed Mar 30 23:22:57 PDT 2022
+
+Match found for cards with identity 'B'.
+
+Wed Mar 30 23:23:00 PDT 2022
+
+Guessed a match between card at location 5 and card at location 8.
+
+Wed Mar 30 23:23:00 PDT 2022
+
+Match found for cards with identity 'C'.

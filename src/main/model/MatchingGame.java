@@ -72,6 +72,8 @@ public class MatchingGame implements Writable {
             }
             addNewCardIdentity(unusedIdentity);
             makeBoardArrangement();
+            EventLog.getInstance().logEvent(new Event("Added a pair of cards with identity '"
+                    + unusedIdentity + "' to the game."));
         }
     }
 
@@ -123,7 +125,14 @@ public class MatchingGame implements Writable {
     public boolean isAMatch(int locationNum1, int locationNum2) {
         Card c1 = findCard(locationNum1);
         Card c2 = findCard(locationNum2);
-        return c1.getIdentity().equals(c2.getIdentity());
+        EventLog.getInstance().logEvent(new Event("Guessed a match between card at location " + locationNum1
+                + " and card at location " + locationNum2 + "."));
+        boolean match = c1.getIdentity().equals(c2.getIdentity());
+        if (match) {
+            EventLog.getInstance().logEvent(new Event("Match found for cards with identity '"
+                    + c1.getIdentity() + "'."));
+        }
+        return match;
     }
 
     // MODIFIES: this
