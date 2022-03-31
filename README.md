@@ -74,3 +74,14 @@ Guessed a match between card at location 5 and card at location 8.
 Wed Mar 30 23:23:00 PDT 2022
 
 Match found for cards with identity 'C'.
+
+## Phase 4: Task 3
+
+If I had more time to work on this project, some refactoring I would do is:
+
+- Combine both the associations between MatchingGame and Card into 1 association with multiplicity 0...52 (a field that contains all cards in the game), and alter the methods that use this association to work with that
+- Add a new abstract Panel class which encompasses the shared behaviour of each of the panel classes
+- Refactor each of StartPanel, MenuPanel, GamePanel, ScorePanel, and GameOverPanel to extend the abstract Panel class and utilize any behaviour from Panel as applicable
+- Remove any associations between MatchingGameApp and StartPanel, MenuPanel, GamePanel, ScorePanel, and GameOverPanel, and create a bidirectional association between MatchingGameApp and Panel, with MatchingGameApp having 5 of Panel and Panel having 1 of MatchingGameApp
+- Make the MatchingGameApp constructor instantiate a list (field) that holds objects of apparent type Panel and add one StartPanel, one MenuPanel, one GamePanel, one ScorePanel, and one GameOverPanel, and add another method to MatchingGameApp that adds the next panel in the list to the JFrame and removes the previous one
+- Add a unidirectional association from Panel to MatchingGame (multiplicity 1) to allow all subclasses to access the game, and remove any associations between the individual panel classes and MatchingGame
