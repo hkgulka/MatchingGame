@@ -43,7 +43,7 @@ public class GamePanel extends JPanel {
     // EFFECTS: initializes the text and adds it to the panel
     private void initializeText() {
         guessText = new JLabel("Make a guess!");
-        guessText.setFont(new Font("Arial", 20, 20));
+        guessText.setFont(new Font("Arial", Font.PLAIN, 20));
         guessText.setForeground(Color.WHITE);
         guessText.setBackground(Color.BLACK);
         add(guessText);
@@ -62,7 +62,7 @@ public class GamePanel extends JPanel {
         quitButton.addActionListener(gameApp);
         quitButton.setForeground(Color.BLACK);
         quitButton.setBackground(Color.WHITE);
-        quitButton.setFont(new Font("Arial", 20, 18));
+        quitButton.setFont(new Font("Arial", Font.PLAIN, 18));
         quitButton.setFocusable(false);
         menuArea.add(quitButton);
     }

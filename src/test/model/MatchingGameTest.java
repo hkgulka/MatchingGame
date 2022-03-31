@@ -61,6 +61,17 @@ class MatchingGameTest {
     }
 
     @Test
+    void testAddCardPairsMaximum() {
+        for (int i = 0; i <= 26; i++) {
+            testGame.addCardPair();
+        }
+        assertEquals(26, testGame.getCardIdentities().size());
+
+        testGame.addCardPair();
+        assertEquals(26, testGame.getCardIdentities().size());
+    }
+
+    @Test
     void testFindUnusedIdentity() {
         assertEquals("C", testGame.findUnusedIdentity());
         testGame.addCardPair();
